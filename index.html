@@ -3,32 +3,69 @@
 <head>
 <title>Mass Effect 3: Datapad</title>
 <style>
-	@font-face {
-    			font-family: 'Mass Effect';
-    			src: url('me123.ttf') format('opentype');
-    			font-weight: normal;
-    			font-style: normal;
+    
+    @font-face {
+    	font-family: 'Mass Effect';
+    	src: url('me123.ttf') format('opentype');
+    	font-weight: normal;
+    	font-style: normal;
 	}
-  
-  body {
+    
+    body {
     	background-color: #071e2d;
         color: #8ef0fb;
+        text-align: center;
     }
+    
+    h1, .name, .date {
+		font-family: 'Mass Effect';
+	}
     
     button {
     	color: #8ef0fb;
+        width: 130px;
+        text-align: left;
+        padding: 2px;
     }
-	h1 {
-		font-family: 'Mass Effect';
-	}
+    
+    #name {
+    	background: rgb(26,139,174);
+background: linear-gradient(174deg, rgba(26,139,174,1) 0%, rgba(6,85,114,1) 42%, rgba(7,47,71,1) 71%);
+    }
+    
+    #date {
+    	background: black;
+    }
+    
+    .name, .date {
+    	font-weight: normal;
+    }
+	
+    .name {
+    	float: left;
+    }
+    
+    .date {
+    	text-align: right;
+    }
+    div {
+    	width: 100%;
+        border: 1px #8ef0fb;
+        border-style: solid none;
+    }
     
 </style>
 </head>
 <body>
 
 <h1>Messages</h1>
-<button>Name</button>
-<button>Date</button>
+<button id="name">Name</button>
+<button id="date">Date</button>
+<br><br>
+<div>
+<span class="name">Aria</span>
+<span class="date">11/22/23</span>
+</div>
 
 </body>
 </html>
