@@ -44,7 +44,10 @@
     }
     
     #date {
-    	background: black;
+    	background: rgb(26,139,174);
+		background: linear-gradient(174deg, rgba(26,139,174,1) 0%, rgba(6,85,114,1) 42%, rgba(87,31,46,1) 71%);
+        border-color: #7a475b;
+		
     }
     
     .name, .date {
@@ -68,7 +71,6 @@
         padding-top: 5px;
         padding-bottom: 10px;
         text-align: right;
-
     }
     
     p {
@@ -99,7 +101,7 @@
     <tbody id="myactualtable"></tbody>
 </table>
 <script>
-    $.getJSON("https://skookuri.github.io/masseffectdatapadmessages/inboxlist.json", function(data) {
+$.getJSON("https://skookuri.github.io/masseffectdatapadmessages/inboxlist.json", function(data) {
     var arr = data.DATAPAD.INBOX;
     arr.forEach(function(list) {
         var newrow = $("<tr>");
@@ -127,22 +129,37 @@
     });
       
       
-      /*$(document).ready(function(){ 
-        $("button").click(function(){
-        	//$("#mytable td").hide();
-            
-            $("#myactualtable tr").filter(function() {
-                var value = $("select option:selected").text();
-                
-                if (value != "--SELECT GENRE--") {
-                	$(this).toggle($(this).text().indexOf(value) > -1);
-                } else {
-                	$(this).show();
-                }
-    		}); //toggle
-        }); //button
-      });*/ //document ready, commenting out for now
-    }); //json
+    $(document).ready(function() {
+      	var ascending = true; // flag to keep track of the sort order
+  
+  		$("#name").click(function() {
+    		var table = $("#mytable");
+    		var rows = table.find("tr"); // exclude header row
+    
+    		// sort rows based on the name column
+    		rows.sort(function(a, b) {
+      			var nameA = $(a).find(".name").text().toLowerCase();
+      			var nameB = $(b).find(".name").text().toLowerCase();
+      			if (nameA < nameB) return -1;
+      			if (nameA > nameB) return 1;
+      			return 0;
+    		});
+    
+    		// reverse the sort order if the button has been clicked before
+    		if (!ascending) rows = rows.toArray().reverse();
+    
+    		// update button text and flag
+			var buttonText = ascending ? "Namev" : "Name^";
+    		$(this).text(buttonText);
+    		ascending = !ascending;
+    
+    		// re-insert sorted rows into the table
+    		$.each(rows, function(index, row) {
+      			table.append(row);
+    		});
+  		}); //name button click
+	}); //document ready
+}); //json
 </script> 
 </body>
 </html>
