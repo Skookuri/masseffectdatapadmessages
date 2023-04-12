@@ -1,8 +1,10 @@
-<!DOCTYPE html>
 <html>
 <head>
-<title>Mass Effect 3: Datapad</title>
-<style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <title>Mass Effect 3: Datapad</title>
+  <style>
     
     @font-face {
     	font-family: 'Mass Effect';
@@ -55,7 +57,7 @@
     	float: right;
     }
     
-    .messagebox {
+    tr, .messagebox {
     	width: 100%;
         border: 1px #8ef0fb;
         border-style: solid none none;
@@ -77,96 +79,68 @@
         float: left;
         padding-right: 10px;
     }
-    
-    
-</style>
+	</style>
 </head>
 <body>
-
 <h1>Messages</h1>
 <button id="name">Name</button>
 <button id="date">Date</button>
 <br><br>
 
-<div class="messagebox">
-<img src="https://64.media.tumblr.com/avatar_35680b63d793_128.pnj" alt="profile pic">
-<span class="name">Aria</span>
-<span class="date">11/22/23</span>
-<br>
-<div style="text-align: left;">
-<p>Nice work on Vosque. Glad you didn't have to get your hands dirty, Spectre.</p>
-</div>
-</div>
-
-<div class="messagebox">
-<img src="https://www.writeups.org/wp-content/uploads/Jacob-Taylor-Mass-Effect-2-3-Profile-n.jpg" alt="profile pic">
-<span class="name">Jacob</span>
-<span class="date">11/22/23</span>
-<br>
-<div style="text-align: left;">
-<p>Here's the update. Brynn now wants to call the baby 'Hackett'. Heh, not bad for a girl, I guess.</p>
-</div>
-</div>
-
-<div class="messagebox">
-<img src="https://64.media.tumblr.com/avatar_9b8422eefaef_128.pnj" alt="profile pic">
-<span class="name">Liara</span>
-<span class="date">11/22/23</span>
-<br>
-<div style="text-align: left;">
-<p>It was horrible to see the Ardat-Yakshi like that. Thank you for taking the time to destroy the monastery.</p>
-</div>
-</div>
-
-<div class="messagebox">
-<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCNL5b7EkpL7T-F1n7XtjO3HqJrh5_V5DPH6ihJGeaVwFe-Z3kwIzGsLO3n7u3vndqnarq-J5XQME&usqp=CAU&ec=48665701" alt="profile pic">
-<span class="name">Miranda</span>
-<span class="date">11/22/23</span>
-<br>
-<div style="text-align: left;">
-<p>Finally got back to the Citadel. Found what I needed. Talk to you soon.</p>
-</div>
-</div>
-
-<div class="messagebox">
-<img src="https://www.postavy.cz/foto/diana-allers-foto.jpg" alt="profile pic">
-<span class="name">Allers</span>
-<span class="date">11/22/23</span>
-<br>
-<div style="text-align: left;">
-<p>Interview has aired--and it's getting re-run all over the place! You and your household name....</p>
-</div>
-</div>
-
-<div class="messagebox">
-<img src="https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg" alt="profile pic">
-<span class="name">Noles</span>
-<span class="date">11/22/23</span>
-<br>
-<div style="text-align: left;">
-<p>Thanks for helping me track those codes. No further trouble on my end. Good luck with the batarian fleet.</p>
-</div>
-</div>
-
-<div class="messagebox">
-<img src="https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg" alt="profile pic">
-<span class="name">James</span>
-<span class="date">11/22/23</span>
-<br>
-<div style="text-align: left;">
-<p>Thanks for showing me the shiny digs. Still not sure if N7's right for me, but the talk helps.</p>
-</div>
-</div>
-
-<div class="messagebox">
-<img src="https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg" alt="profile pic">
-<span class="name">Bailey</span>
-<span class="date">11/22/23</span>
-<br>
-<div style="text-align: left;">
-<p>Hell of a mess down here. Could've been a lot worse, though. Thanks.</p>
-</div>
-</div>
-
+<table id="mytable">
+    <tbody id="myactualtable">
+    	<tr>
+        <div class="messagebox">
+			<img src="https://64.media.tumblr.com/avatar_35680b63d793_128.pnj" alt="profile pic">
+			<span class="name">Aria</span>
+			<span class="date">11/22/23</span>
+			<br>
+			<div style="text-align: left;">
+				<p>Nice work on Vosque. Glad you didn't have to get your hands dirty, Spectre.</p>
+			</div>
+		</div>
+        </tr>
+    </tbody>
+</table>
+<script>
+    $.getJSON("https://skookuri.github.io/masseffectdatapadmessages/inboxlist.json", function(data) {
+    var arr = data.DATAPAD.INBOX;
+    arr.forEach(function(list) {
+        var newrow = $("<tr>");
+        var messageBox = $("<div>").addClass("messagebox");
+        var img = $("<img>").attr("src", list.IMAGE).attr("alt", "profile pic");
+        var name = $("<span>").addClass("name").text(list.NAME);
+        var date = $("<span>").addClass("date").text("11/22/23");
+        var message = $("<p>").text(list.MESSAGE);
+        
+        messageBox.append(img);
+        messageBox.append(name);
+        messageBox.append(date);
+        messageBox.append("<br>");
+        messageBox.append($("<div>").css("text-align", "left").append(message));
+        
+        newrow.append($("<td>").append(messageBox));
+        
+        $("#myactualtable").append(newrow);
+    });
+      
+      
+      /*$(document).ready(function(){ 
+        $("button").click(function(){
+        	//$("#mytable td").hide();
+            
+            $("#myactualtable tr").filter(function() {
+                var value = $("select option:selected").text();
+                
+                if (value != "--SELECT GENRE--") {
+                	$(this).toggle($(this).text().indexOf(value) > -1);
+                } else {
+                	$(this).show();
+                }
+    		}); //toggle
+        }); //button
+      });*/ //document ready, commenting out for now
+    }); //json
+</script> 
 </body>
 </html>
