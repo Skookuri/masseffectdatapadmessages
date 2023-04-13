@@ -1,0 +1,185 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <meta property="og:title" content="Mass Effect 3: Datapad">
+  <meta property="og:description" content="The Messages Page for Rowan <3">
+  <meta property="og:image" content="https://images-ext-1.discordapp.net/external/aLLtNmYZX_UF5IKBPWhEg9uM8kSKWos2y_V5MXKIpgU/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/492149848213291008/7c47bb20e3390e073c789c59d44ae2a1.png?width=512&height=512">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <title>Mass Effect 3: Datapad</title>
+  <style>
+    
+    @font-face {
+    	font-family: 'Mass Effect';
+    	src: url('me123.ttf') format('opentype');
+    	font-weight: normal;
+    	font-style: normal;
+	}
+    
+    body {
+    	background-color: #071e2d;
+        color: #8ef0fb;
+        text-align: center;
+        font-family: arial;
+    }
+    
+    h1, .name, .date {
+		font-family: 'Mass Effect';
+        font-weight: normal;
+	}
+    
+    button {
+    	color: #8ef0fb;
+        width: 130px;
+        text-align: left;
+        padding: 2px;
+        cursor: pointer;
+    }
+    
+    #name {
+    	background: rgb(26,139,174);
+		background: linear-gradient(174deg, rgba(26,139,174,1) 0%, rgba(6,85,114,1) 42%, rgba(7,47,71,1) 71%);
+        border-color: #1a8bae;
+
+    }
+    
+    #date {
+    	background: rgb(26,139,174);
+		background: linear-gradient(174deg, rgba(26,139,174,1) 0%, rgba(6,85,114,1) 42%, rgba(87,31,46,1) 71%);
+        border-color: #7a475b;
+		
+    }
+    
+    .name, .date {
+    	font-weight: normal;
+    }
+	
+    .name {
+    	float: left;
+        font-size: 14px;
+    }
+    
+    .date {
+    	float: right;
+        font-size: 12px;
+    }
+    
+    tr, .messagebox {
+    	width: 100%;
+        border: 1px #8ef0fb;
+        border-style: solid none none;
+        padding-top: 5px;
+        padding-bottom: 10px;
+        text-align: right;
+    }
+    
+    p {
+    	display: inline-block;
+        margin-bottom: 0px;
+        margin-top: 10px;
+    }
+    
+    img {
+    	width:50px;
+        height:50px;
+        float: left;
+        padding-right: 10px;
+    }
+    
+    table {
+    	width: 100%;
+    }
+    
+    .settings {
+    	float: left;
+        border: solid 1px #8ef0fb;
+        position: absolute;
+        font-size: 12px;
+        background-color: #071e2d;
+    }
+    
+    ul {
+    	list-style-type: none;
+        margin: 0;
+    	padding: 10px;
+    	text-align: center;
+    }
+	</style>
+</head>
+<body>
+<div class="settings">
+
+</div>
+<div class="titletop">
+<h1>Messages</h1>
+<button id="name">Name</button>
+<button id="date">Date</button>
+</div>
+<br><br>
+
+<table id="mytable">
+    <tbody id="myactualtable"></tbody>
+</table>
+<script>
+$.getJSON("https://skookuri.github.io/masseffectdatapadmessages/inboxlist.json", function(data) {
+    var arr = data.DATAPAD.INBOX;
+    arr.forEach(function(list) {
+        var newrow = $("<tr>");
+        var messageBox = $("<div>").addClass("messagebox");
+        var img = $("<img>").attr("src", list.IMAGE).attr("alt", "profile pic");
+        var name = $("<span>").addClass("name").text(list.NAME);
+        var message = $("<p>").text(list.MESSAGE);
+        
+        var d = new Date();
+        var month = d.getMonth()+1;
+        var day = d.getDate();
+        var output = d.getFullYear() + '/' + (month<10 ? '0' : '') + month + '/' + (day<10 ? '0' : '') + day;
+        var date = $("<span>").addClass("date").text(output);
+        
+        
+        messageBox.append(img);
+        messageBox.append(name);
+        messageBox.append(date);
+        messageBox.append("<br>");
+        messageBox.append($("<div>").css("text-align", "left").append(message));
+        
+        newrow.append($("<td>").append(messageBox));
+        
+        $("#myactualtable").append(newrow);
+    });
+      
+      
+    $(document).ready(function() {
+      	var ascending = true; // flag to keep track of the sort order
+  
+  		$("#name").click(function() {
+    		var table = $("#mytable");
+    		var rows = table.find("tr"); // exclude header row
+    
+    		// sort rows based on the name column
+    		rows.sort(function(a, b) {
+      			var nameA = $(a).find(".name").text().toLowerCase();
+      			var nameB = $(b).find(".name").text().toLowerCase();
+      			if (nameA < nameB) return -1;
+      			if (nameA > nameB) return 1;
+      			return 0;
+    		});
+    
+    		// reverse the sort order if the button has been clicked before
+    		if (!ascending) rows = rows.toArray().reverse();
+    
+    		// update button text and flag
+			var buttonText = ascending ? "Namev" : "Name^";
+    		$(this).text(buttonText);
+    		ascending = !ascending;
+    
+    		// re-insert sorted rows into the table
+    		$.each(rows, function(index, row) {
+      			table.append(row);
+    		});
+  		}); //name button click
+	}); //document ready
+}); //json
+</script> 
+</body>
+</html>
